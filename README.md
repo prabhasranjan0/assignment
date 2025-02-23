@@ -1,5 +1,11 @@
 ## Getting Started on React JS
 
+Clone the repo
+
+```sh
+git clone https://github.com/prabhasranjan0/assignment.git
+```
+
 Open the terminal in the project directory, and install dependencies with:
 
 ```bash
