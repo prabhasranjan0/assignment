@@ -11,7 +11,7 @@ const PredefinedRanges: React.FC<PredefinedRangesProps> = ({
   applyPredefinedRange,
 }) => {
   return (
-    <div>
+    <div style={{ display: "flex", gap: "10px" }}>
       {predefinedRanges.map((range) => (
         <button
           key={range.label}

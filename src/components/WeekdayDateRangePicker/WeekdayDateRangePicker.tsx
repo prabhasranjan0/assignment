@@ -8,11 +8,13 @@ import { PREDEFINED_RANGES } from "../constants";
 interface Props {
   onChange?: (range: [Date | null, Date | null], weekends: Date[]) => void;
   preSetDateRange?: [Date | null, Date | null];
+  handleReset: () => void;
 }
 
 const WeekdayDateRangePicker: React.FC<Props> = ({
   onChange,
   preSetDateRange,
+  handleReset,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentDateNextCalender, setCurrentDateNextCalender] = useState(
@@ -162,7 +164,9 @@ const WeekdayDateRangePicker: React.FC<Props> = ({
       setCurrentDateNextCalender(
         new Date(startDate).getMonth() === new Date(endDate).getMonth() &&
           new Date(startDate).getFullYear() === new Date(endDate).getFullYear()
-          ? new Date(new Date(endDate).setMonth(new Date().getMonth() + 1))
+          ? new Date(
+              new Date(endDate).setMonth(new Date(startDate).getMonth() + 1)
+            )
           : new Date(
               endDate.getFullYear(),
               endDate.getMonth(),
@@ -188,6 +192,22 @@ const WeekdayDateRangePicker: React.FC<Props> = ({
         nextMonth.getMonth() === date2.getMonth()
       );
     };
+
+    const newYear = currentDate.getFullYear();
+    const newMonth = currentDate.getMonth() + 1;
+    const newDateForCurrent = new Date(newYear, newMonth);
+
+    if (newDateForCurrent >= currentDateNextCalender) {
+      const newDateForNext = new Date(
+        newDateForCurrent.getFullYear(),
+        newDateForCurrent.getMonth() + 1
+      );
+
+      if (newDateForNext <= newDateForCurrent) return;
+      setCurrentDateNextCalender(newDateForNext);
+      setCurrentDate(newDateForCurrent);
+      return;
+    }
     if (areConsecutive(currentDate, currentDateNextCalender)) {
       setCurrentDate(
         new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
@@ -439,7 +459,10 @@ const WeekdayDateRangePicker: React.FC<Props> = ({
           predefinedRanges={PREDEFINED_RANGES}
           applyPredefinedRange={applyPredefinedRange}
         />
-        <button onClick={handleApply}>Apply</button>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button onClick={handleReset}>Reset</button>
+          <button onClick={handleApply}>Apply</button>
+        </div>
       </div>
     </div>
   );

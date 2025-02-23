@@ -19,18 +19,25 @@ function App() {
     []
   );
 
+  const handleReset = useCallback(() => {
+    setDateRange([null, null]);
+    setWeekendDates([]);
+    setShowPicker(false);
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
+        !inputRef.current.contains(event.target as Node) &&
+        showPicker
       ) {
         setShowPicker(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [showPicker]);
 
   return (
     <div
@@ -40,10 +47,9 @@ function App() {
       }}
     >
       <div
-        style={{ position: "relative", display: "inline-block" }}
+        style={{ position: "relative", display: "inline-block", marginTop: 20 }}
         ref={inputRef}
       >
-        {/* Input Field with Calendar Icon */}
         <div
           onClick={() => setShowPicker(!showPicker)}
           style={{
@@ -80,6 +86,7 @@ function App() {
             <WeekdayDateRangePicker
               onChange={handleDateRangeChange}
               preSetDateRange={dateRange}
+              handleReset={handleReset}
             />
           </div>
         )}
